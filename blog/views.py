@@ -3,6 +3,8 @@ from django.urls import path
 from django.shortcuts import render, redirect
 from . import models
 from . import forms
+from django.views.generic import ListView, DetailView
+
 
 # Create your views here
 
@@ -41,6 +43,29 @@ def post_create(req):
     else:
         form = forms.PostModelForm()
         return render(req, 'blog/create.html' , {'form': form})
+    
+    
+# Generic views
+# 클래스 뷰 중 가장 많이 사용되는 구조로 CRUD 작업을 위한 기본 구조 제공
+# 설정을 통한 기능 변경 및 커스터마이징
+# 간결한 코드 작성
+
+# class PostListView (ListView):
+#     model = models.Post
+#     template_name = "blog/post_list.html"
+#     context_object_name = "post_list"
+
+# class PostDetailView (DetailView):
+#     model = models.Post
+#     template_name = "blog/post_detail.html"
+#     context_object_name = "post"
+
+# class PostCreateView (CreateView):
+#     model = models.Post
+#     form_class = forms.PostModelForm
+#     template_name = "blog/post_create.html"
+#     success_url = "/blog/posts/"
+
 
 
 # ORM
