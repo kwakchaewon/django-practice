@@ -1,8 +1,8 @@
 from django.http import HttpResponse, HttpRequest
 from django.urls import path
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from . import models
-# from django.http import render
+from . import forms
 
 # Create your views here
 
@@ -30,6 +30,17 @@ def index(request):
     posts = models.Post.objects.all()    
     return render(request, 'blog/index.html', {'posts':posts})
     # return HttpResponse(posts)
+    
+def post_create(req):
+    if req.method == "POST":
+        form = forms.PostModelForm(req.POST)
+        if form.is_valid():
+            form.save()
+        return redirect("/blog/")
+    
+    else:
+        form = forms.PostModelForm()
+        return render(req, 'blog/create.html' , {'form': form})
 
 
 # ORM

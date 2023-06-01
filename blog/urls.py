@@ -8,4 +8,5 @@ urlpatterns = [
     path('counter1/', views.counter1),
     path('counter2/', views.counter2),
     path('<int:pk>/' , views.post_detail,name='post_detail'),
+    path('postcreate/', views.post_create, name='post_create'),
 ]
