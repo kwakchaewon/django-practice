@@ -1,0 +1,7 @@
+쉘> http :8000 # 목록 조회
+쉘> http --form POST :8000 message="hello world" # 새 포스팅 등록
+쉘> http :8000/1/ # 1번 포스팅 조회
+쉘> http --form PUT :8000/1/ message="hello django" # 1번 포스팅 수정
+쉘> http :8000/1/ # 1번 포스팅 수정
+쉘> http DELETE :8000/1/ # 1번 포스팅 삭제
+쉘> http :8000 # 목록 조회

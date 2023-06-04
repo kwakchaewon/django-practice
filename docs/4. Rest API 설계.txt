@@ -1,0 +1,18 @@
+1. Rest API 재설계
+
+1) /post/ 주소
+- GET 방식 요청 : 목록 응답
+- POST 방식 요청 : 새 글 생성하고, 확인 응답
+- (사용 X) PUT/PATCH 방식 요청
+- (사용 X) DELETE 방식 요청
+
+2) /post/10/ 주소
+- GET 방식 요청 : 10번 글 내용 응답
+- (사용 X) POST 방식 요청
+- PUT 방식 요청 : 10번 글 수정/저장하고, 확인 응답
+- DELETE 방식 요청 : 10번 글 삭제하고, 확인 응답
+
+
+3) 선행 과정:
+$ pip install djangorestframework
+settings.INSTALLED_APPS "rest_framework"
