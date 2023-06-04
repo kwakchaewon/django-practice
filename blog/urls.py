@@ -10,6 +10,9 @@ urlpatterns = [
     path('<int:pk>/' , views.post_detail,name='post_detail'),
     path('postcreate/', views.post_create, name='post_create'),
     
+    # REST API
+    path('api/post/' , views.api_posts),
+    path('api/post/<int:pk>/' , views.api_post)
     
     # Generic views
     # path('posts/', views.PostListView.as_view()),

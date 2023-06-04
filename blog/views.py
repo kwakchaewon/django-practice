@@ -1,10 +1,11 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.urls import path
 from django.shortcuts import render, redirect
 from . import models
 from . import forms
 from django.views.generic import ListView, DetailView
-
+from django.views.decorators.csrf import csrf_exempt
+from django.forms.models import model_to_dict
 
 # Create your views here
 
@@ -44,6 +45,72 @@ def post_create(req):
         form = forms.PostModelForm()
         return render(req, 'blog/create.html' , {'form': form})
     
+@csrf_exempt
+def api_posts(req):
+    if req.method == 'GET':
+        return JsonResponse(api_post_list())
+    
+    elif req.method == 'POST':
+        body = json.loads(req.body.decode( 'utf-8')) # loads: json을 객체로 변환
+        return JsonResponse(api_post_create(body))
+    
+    else:
+        return HttpResponse(status= 405)
+    
+def api_post_list():
+    posts = models.Post.objects. all()
+    return {"results": list(posts.values())}
+
+def api_post_create(body):
+    p = models.Post(title=body[ 'title'], 
+    content=body[ 'content'])
+    p.save()
+    return {"results": model_to_dict(p)}
+
+@csrf_exempt
+def api_post(req, pk):
+    
+    if req.method == 'GET':
+        result = api_post_detail(pk)
+        return JsonResponse(result) if result else HttpResponse(status= 404)
+    
+    elif req.method == 'PUT':
+        body = json.loads(req.body.decode( 'utf-8'))
+        result = api_post_update(pk, body)
+        return JsonResponse(result) if result else HttpResponse(status= 404)
+    
+    elif req.method == 'DELETE':
+        result = api_post_delete(pk)
+        return JsonResponse(result) if result else HttpResponse(status= 404)
+    
+    else:
+        return HttpResponse(status= 405)
+    
+    
+def api_post_detail(pk):
+    post = models.Post.objects. filter(pk=pk)
+    return {"results": model_to_dict(post[ 0])} if post else None
+
+def api_post_update(pk, body):
+    post = models.Post.objects. filter(pk=pk)
+    
+    if not post: return None
+    p = post[ 0]
+    p.title, p.content = body[ 'title'], body['content']
+    p.save()
+    return {"results": model_to_dict(p)}
+
+def api_post_delete(pk):
+    post = models.Post.objects. filter(pk=pk)
+    
+    if not post: return None
+    post[0].delete()
+    return {"results": "ok"}
+    
+
+
+
+
     
 # Generic views
 # 클래스 뷰 중 가장 많이 사용되는 구조로 CRUD 작업을 위한 기본 구조 제공
